@@ -16,7 +16,10 @@ jobs: #berisi definisi dari setiap job yang akan dijalankan dalam pipeline.
       - run: #menjalankan perintah yang ada dibawah
           name: Test App #nama langkah
           #perintah yang akan dijalankan
-          command: go test -v -short --count=1 $(go list ./...)
+          command: |
+            apk add --update go
+            go version
+            go test -v -short --count=1 $(go list ./...)
       - setup_remote_docker: #add docker remote
           version: 20.10.14 #version docker
           docker_layer_caching: true #layer caching

@@ -18,7 +18,6 @@ jobs: #berisi definisi dari setiap job yang akan dijalankan dalam pipeline.
           #perintah yang akan dijalankan
           command: |
             apk add --update go
-            go version
             go test -v -short --count=1 $(go list ./...)
       - setup_remote_docker: #add docker remote
           version: 20.10.14 #version docker

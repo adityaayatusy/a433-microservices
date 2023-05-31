@@ -1,0 +1,12 @@
+apiVersion: v1 #versi API untuk object service.
+kind: Service #membuat sebuah service.
+metadata: #berisi metadata terkait service.
+  name: karsajobs-service #nama service.
+spec: #berisi spesifikasi service.
+  type: NodePort #service akan mengexpose ke luar cluster menggunakan NodePort.
+  selector: #digunakan untuk memilih pod-pod yang akan dipetakan oleh service berdasarkan label.
+    name: karsajobs #pod-pod dengan label "name: karsajobs" akan dipetakan oleh service.
+  ports: #mendefinisikan port yang akan dibuka oleh service.
+    - port: 8080 #menentukan port yang akan digunakan oleh service.
+      targetPort: 8080 #menentukan port di dalam container atau pod yang akan dituju oleh service.
+      nodePort: 30000 #port yang akan di expose oleh nodeport

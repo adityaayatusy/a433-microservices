@@ -1,0 +1,42 @@
+apiVersion: apps/v1 #versi API untuk object StatefulSet.
+kind: StatefulSet #membuat sebuah StatefulSet.
+metadata: #berisi metadata terkait StatefulSet.
+  name: mongo-statefulset #nama StatefulSet.
+spec: #berisi spesifikasi StatefulSet.
+  replicas: 1 #jumlah replika yang akan dibuat untuk aplikasi.
+  serviceName: mongo-service #nama Service yang akan digunakan oleh StatefulSet
+  selector: #digunakan untuk memilih Pod yang akan dimasukkan dalam StatefulSet
+    matchLabels: #menentukan label yang harus cocok dengan Pod yang ada untuk dimasukkan dalam StatefulSet.
+      app: mongodb #pods yang memiliki label "app: mongodb" akan dipilih.
+  template: #digunakan untuk menentukan template Pod yang akan dibuat oleh StatefulSet.
+    metadata: #digunakan untuk menentukan metadata untuk Pod,
+      labels: #menentukan label untuk Pod yang akan dibuat.
+        app: mongodb #label untuk template Pod.
+    spec: #digunakan untuk menentukan spesifikasi Pod.
+      containers: #digunakan untuk mendefinisikan kontainer dalam Pod.
+        - name: mongodb #nama container.
+          image: mongo #image Docker yang akan digunakan untuk container.
+          env:  #environment yang akan digunakan di container
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE #variable yang akan di set
+              value: /etc/mongo-credentials/MONGO_ROOT_USERNAME #value yang akan di ambil berdasarkan path
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE #variable yang akan di set
+              value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD #value yang akan di ambil berdasarkan path
+          ports:
+            - containerPort: 27017 #port yang akan diexpose oleh container.
+          volumeMounts: #digunakan untuk mengaitkan volume dengan mount path dalam kontainer.
+            - name: data-volume #nama volume.
+              mountPath: /data/db #path volume.
+            - name: config-volume #nama volume.
+              mountPath: /config #path volume.
+            - name: secret-volume #nama volume.
+              mountPath: /etc/mongo-credentials #path volume.
+      volumes:
+        - name: data-volume #nama volume.
+          persistentVolumeClaim: #menghubungkan volume dengan PersistentVolumeClaim yang ada.
+            claimName: mongo-pvc #nama object pvc yang telah dibuat
+        - name: config-volume #nama volume.
+          configMap: #menghubungkan volume dengan ConfigMap yang ada.
+            name: mongo-configmap #nama object configmap yang telah dibuat
+        - name: secret-volume  #nama volume.
+          secret: #menghubungkan volume dengan Secret yang ada.
+            secretName: mongo-secret #nama object secret yang telah dibuat

@@ -1,0 +1,22 @@
+apiVersion: apps/v1 #menentukan versi API untuk objek Deployment.
+kind: Deployment #menandakan bahwa objek ini adalah Deployment.
+metadata: #berisi metadata untuk Deployment, seperti nama dan label.
+  name: karsajobs-ui #nama Deployment yang akan dibuat.
+  labels: #label-label yang digunakan.
+    name: karsajobs-ui #label yang digunakan untuk memilih objek-objek terkait dengan Deployment.
+spec: #spesifikasi Deployment
+  replicas: 2 #jumlah replika yang akan dibuat untuk aplikasi.
+  selector: #menentukan selektor untuk memilih Pods yang terkait dengan Deployment ini.
+    matchLabels: #selektor yang digunakan untuk memilih objek-objek yang terkait.
+      name: karsajobs-ui #pods yang memiliki label "name: karsajobs-ui" akan dipilih.
+  template: #template Pod yang akan digunakan oleh Deployment.
+    metadata: #metadata untuk template Pod.
+      name: karsajobs-ui #nama template Pod.
+      labels:  #menentukan label untuk Pod yang akan dibuat.
+        name: karsajobs-ui #label untuk template Pod.
+    spec: #spesifikasi template Pod.
+      containers: #konfigurasi container yang akan dijalankan di dalam Pod.
+        - name: karsajobs-ui #nama container.
+          image: ghcr.io/adityaayatusy/a433-microservices/karsajobs-ui:latest #image Docker yang akan digunakan untuk container.
+          ports:
+            - containerPort: 8000 #port yang akan diexpose oleh container.

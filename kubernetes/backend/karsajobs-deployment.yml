@@ -1,0 +1,34 @@
+apiVersion: apps/v1 #menentukan versi API untuk objek Deployment.
+kind: Deployment #menandakan bahwa objek ini adalah Deployment.
+metadata: #berisi metadata untuk Deployment, seperti nama dan label.
+  name: karsajobs  #nama Deployment yang akan dibuat.
+spec: #spesifikasi Deployment
+  replicas: 2 #jumlah replika yang akan dibuat untuk aplikasi.
+  selector: #menentukan selektor untuk memilih Pods yang terkait dengan Deployment ini.
+    matchLabels: #selektor yang digunakan untuk memilih objek-objek yang terkait.
+      name: karsajobs #pods yang memiliki label "name: karsajobs-ui" akan dipilih.
+  template: #template Pod yang akan digunakan oleh Deployment.
+    metadata: #metadata untuk template Pod.
+      labels:
+        name: karsajobs #label untuk template Pod.
+    spec: #spesifikasi template Pod.
+      containers: #konfigurasi container yang akan dijalankan di dalam Pod.
+        - name: karsajobs #nama container.
+          image: ghcr.io/adityaayatusy/a433-microservices/karsajobs:latest #image Docker yang akan digunakan untuk container.
+          ports:
+            - containerPort: 8080 #port yang akan diexpose oleh container.
+          env: #environment yang akan digunakan di container
+            - name: APP_PORT #variable yang akan di set
+              value: "8080" #value yang akan di set
+            - name: MONGO_HOST  #variable yang akan di set
+              value: mongo-service.default.svc.cluster.local #value yang akan di set berdasarkan dns pada service yang di define
+            - name: MONGO_USER #variable yang akan di set
+              valueFrom:
+                secretKeyRef: #menunjukkan bahwa nilai variabel lingkungan akan diambil dari sebuah secret menggunakan referensi key.
+                  name: mongo-secret #nama object secret
+                  key: MONGO_ROOT_USERNAME #key dari object secret yang akan di ambil
+            - name: MONGO_PASS #variable yang akan di set
+              valueFrom:
+                secretKeyRef: #menunjukkan bahwa nilai variabel lingkungan akan diambil dari sebuah secret menggunakan referensi key.
+                  name: mongo-secret #nama object secret
+                  key: MONGO_ROOT_PASSWORD #key dari object secret yang akan di ambil

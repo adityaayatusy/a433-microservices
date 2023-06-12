@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3  #menentukan versi API dari istio yang akan digunakan
+kind: VirtualService #menandakan bahwa objek ini adalah VirtualService
+metadata: #berisi metadata untuk VirtualService, seperti nama dan label
+    name: order-virtual-service #nama VirtualService yang akan dibuat
+spec: #spesifikasi VirtualService
+    hosts: #daftar host yang diizinkan untuk akses melalui VirtualService
+        - "*" #VirtualService akan menerima semua lalu lintas
+    gateways: #daftar gateway yang dikaitkan dengan VirtualService
+        - service-gateway #VirtualService akan dikaitkan dengan gateway bernama "service-gateway"
+    http: #mendefinisikan aturan pengalihan berdasarkan permintaan HTTP
+        - match: #kondisi yang harus dipenuhi
+              - uri: #memfilter berdasarkan URI permintaan
+                    exact: /order #aturan ini hanya akan diterapkan pada permintaan dengan URI yang sama persis dengan "/order"
+          route: #jika kondisi terpenuhi akan dialihkan ketujuan
+              - destination: #target tujuan pengalihan lalu lintas
+                    host: order-service #akan dialihkan ke service "order-service"
+                    port: #port yang digunakan untuk mengakses service
+                        number: 3000 #port 3000 akan digunakan untuk mengakses service "order-service"

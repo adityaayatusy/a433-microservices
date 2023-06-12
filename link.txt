@@ -3,3 +3,9 @@ https://github.com/users/adityaayatusy/packages/container/package/a433-microserv
 
 karsajobs-ui:
 https://github.com/users/adityaayatusy/packages/container/package/a433-microservices%2Fkarsajobs-ui
+
+order-service:
+https://github.com/users/adityaayatusy/packages/container/package/a433-microservices%2Forder-service
+
+shipping-service:
+https://github.com/users/adityaayatusy/packages/container/package/a433-microservices%2Fshipping-service

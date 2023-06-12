@@ -1,0 +1,12 @@
+apiVersion: v1 #versi API untuk object service
+kind: Service #membuat sebuah service
+metadata: #berisi metadata terkait service
+    name: shipping-service #nama service
+spec: #berisi spesifikasi service
+    selector: #digunakan untuk memilih pod-pod yang akan dipetakan oleh service berdasarkan label
+        app: shipping #pod-pod dengan label "app: shipping" akan dipetakan oleh service
+    ports: #mendefinisikan port yang akan dibuka oleh service
+        - protocol: TCP #protokol yang digunakan oleh Service adalah TCP
+          name: http-shipping #nama port pada Service ini adalah "http-shipping"
+          port: 3001 #menentukan port yang akan digunakan oleh service
+          targetPort: 3001 #menentukan port di dalam container atau pod yang akan dituju oleh service

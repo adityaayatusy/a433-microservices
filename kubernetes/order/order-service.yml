@@ -1,0 +1,12 @@
+apiVersion: v1 #versi API untuk object service
+kind: Service #membuat sebuah service
+metadata: #berisi metadata terkait service
+    name: order-service #nama service
+spec: #berisi spesifikasi service
+    selector: #digunakan untuk memilih pod-pod yang akan dipetakan oleh service berdasarkan label
+        app: order #pod-pod dengan label "app: order" akan dipetakan oleh service
+    ports: #mendefinisikan port yang akan dibuka oleh service
+        - protocol: TCP #protokol yang digunakan oleh Service adalah TCP
+          name: http-order #nama port pada Service ini adalah "http-order"
+          port: 3000 #menentukan port yang akan digunakan oleh service
+          targetPort: 3000 #menentukan port di dalam container atau pod yang akan dituju oleh service

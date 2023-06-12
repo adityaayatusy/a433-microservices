@@ -1,0 +1,27 @@
+apiVersion: v1 #versi API untuk object PersistentVolume.
+kind: PersistentVolume #membuat sebuah PersistentVolume.
+metadata: #berisi metadata terkait PersistentVolume.
+  name: rabbitmq-pv #nama PersistentVolume.
+spec: #berisi spesifikasi PersistentVolume.
+  capacity: #Menentukan kapasitas penyimpanan PV,
+    storage: 10Gi #kapasitas yang diset.
+  accessModes: #Menentukan mode akses ke PV.
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain #Menentukan kebijakan penghapusan PV jika PVC yang terikat dengannya dihapus.
+  storageClassName: manual #Menentukan kelas penyimpanan PV, pengaturan PV dilakukan secara manual.
+  hostPath: #Menentukan jalur host sistem file tempat PV akan dibuat dan disimpan.
+    path: /data/rabbitmq-pv #PV akan disimpan pada jalur /data/rabbitmq-pv di host.
+
+---
+
+apiVersion: v1 #versi API untuk object PersistentVolumeClaim.
+kind: PersistentVolumeClaim #membuat sebuah PersistentVolumeClaim.
+metadata: #berisi metadata terkait PersistentVolumeClaim.
+  name: rabbitmq-pvc #nama PersistentVolumeClaim.
+spec:  #berisi spesifikasi PersistentVolume.
+  accessModes: #Menentukan mode akses yang diminta untuk PVC.
+    - ReadWriteOnce
+  resources: #Menentukan sumber daya yang diminta oleh PVC.
+    requests:
+      storage: 10Gi #meminta penyimpanan sebesar 10Gi.
+  storageClassName: manual # Menentukan kelas penyimpanan yang diminta oleh PVC, pengaturan PVC dilakukan secara manual.

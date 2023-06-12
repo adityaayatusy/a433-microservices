@@ -1,0 +1,23 @@
+apiVersion: apps/v1 #menentukan versi API untuk objek Deployment
+kind: Deployment #menandakan bahwa objek ini adalah Deployment
+metadata: #berisi metadata untuk Deployment, seperti nama dan label.
+    name: shipping #nama Deployment yang akan dibuat.
+spec: #spesifikasi Deployment
+    selector: #menentukan selektor untuk memilih Pods yang terkait dengan Deployment ini.
+        matchLabels: #selektor yang digunakan untuk memilih objek-objek yang terkait.
+            app: shipping #pods yang memiliki label "app: shipping" akan dipilih.
+    template: #template Pod yang akan digunakan oleh Deployment.
+        metadata: #metadata untuk template Pod.
+            labels: #list label
+                app: shipping #label untuk template Pod.
+        spec: #spesifikasi template Pod.
+            containers: #konfigurasi container yang akan dijalankan di dalam Pod.
+                - name: shipping #nama container.
+                  image: ghcr.io/adityaayatusy/a433-microservices/shipping-service:latest #image Docker yang akan digunakan untuk container.
+                  ports:
+                      - containerPort: 3001 #port yang akan diexpose oleh container.
+                  env: #environment yang akan digunakan di container
+                      - name: PORT #variable yang akan di set
+                        value: "3001" #value yang akan di set
+                      - name: AMQP_URL #variable yang akan di set
+                        value: "amqp://rabbitmq-service.default.svc.cluster.local:5672" #value yang akan di set berdasarkan dns pada service yang didefine

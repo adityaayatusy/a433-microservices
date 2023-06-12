@@ -1,0 +1,29 @@
+apiVersion: apps/v1 #versi API untuk object StatefulSet.
+kind: StatefulSet #membuat sebuah StatefulSet.
+metadata: #berisi metadata terkait StatefulSet.
+    name: rabbitmq #nama StatefulSet.
+spec: #berisi spesifikasi StatefulSet.
+    serviceName: rabbitmq #nama Service yang akan digunakan oleh StatefulSet
+    replicas: 1 #jumlah replika yang akan dibuat untuk aplikasi.
+    selector: #digunakan untuk memilih Pod yang akan dimasukkan dalam StatefulSet
+        matchLabels: #menentukan label yang harus cocok dengan Pod yang ada untuk dimasukkan dalam StatefulSet.
+            app: rabbitmq #pods yang memiliki label "app: rabbitmq" akan dipilih.
+    template: #digunakan untuk menentukan template Pod yang akan dibuat oleh StatefulSet.
+        metadata: #digunakan untuk menentukan metadata untuk Pod,
+            labels: #menentukan label untuk Pod yang akan dibuat.
+                app: rabbitmq #label untuk template Pod.
+        spec: #digunakan untuk menentukan spesifikasi Pod.
+            containers: #digunakan untuk mendefinisikan kontainer dalam Pod.
+                - name: rabbitmq #nama container.
+                  image: rabbitmq:3.11-management #image Docker yang akan digunakan untuk container.
+                  ports:  #mendefinisikan port yang akan dibuka oleh containers
+                      - containerPort: 5672 #port yang akan diexpose oleh container.
+                        name: amqp #nama port pada service ini adalah "amqp"
+                  volumeMounts: #digunakan untuk mengaitkan volume dengan mount path dalam kontainer.
+                      - name: data-volume #nama volume.
+                        mountPath: /data/rabbitmq #path volume.
+            volumes:
+                - name: data-volume #nama volume.
+                  persistentVolumeClaim: #menghubungkan volume dengan PersistentVolumeClaim yang ada.
+                      claimName: rabbitmq-pvc #nama object pvc yang telah dibuat
+                     

@@ -22,7 +22,16 @@ spec: #berisi spesifikasi StatefulSet.
                   volumeMounts: #digunakan untuk mengaitkan volume dengan mount path dalam kontainer.
                       - name: data-volume #nama volume.
                         mountPath: /data/rabbitmq #path volume.
-            volumes:
+                  readinessProbe: #pengecekan kesiapan probe
+                        exec: #menjalankan perintah didalam kontainer
+                            command: #berisi perintah
+                                - sh #menggunakan shell
+                                - -c #mengistruksikan shell untuk membaca perintah sebagai string
+                                - rabbitmq-diagnostics ping #memriksa status kesehatan rabbitmq
+                        initialDelaySeconds: 10 #mengatus jeda waktu saat kontainer dimulai
+                        periodSeconds: 10 #menentukan frekuensi pemeriksaan
+                        timeoutSeconds: 5 #memastikan perintah yang dijalankan tidak lebih dari waktu yang ditentukan atau status akan dianggap gagal
+            volumes: #mendefinisikan volume
                 - name: data-volume #nama volume.
                   persistentVolumeClaim: #menghubungkan volume dengan PersistentVolumeClaim yang ada.
                       claimName: rabbitmq-pvc #nama object pvc yang telah dibuat

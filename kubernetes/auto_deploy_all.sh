@@ -8,7 +8,6 @@ kubectl "$arg" -f rabbitmq/rabbitmq-service.yml
 
 if [ "$arg" = "apply" ]; then
    kubectl wait --namespace=default --timeout=50s --for=condition=Ready pod/rabbitmq-0
-   sleep 10s
 fi
 
 kubectl "$arg" -f order/order-deployment.yml
